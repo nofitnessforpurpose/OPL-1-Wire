@@ -5,7 +5,7 @@ This <a href="https://en.wikipedia.org/wiki/Psion_Organiser">Psion Orgnaiser II<
 
 <div align="center">
   <div style="display: flex; align-items: flex-start;">
-  <img src="https://github.com/nofitnessforpurpose/OPL-1-Wire/blob/main/images/TSRIO-1W-01?raw=true" width="400px" alt="NotFitForPurpose Contraption 02. Image copyright (c) 21 December 2024 nofitnessforpurpose All Rights Reserved">
+  <img src="https://github.com/nofitnessforpurpose/OPL-1-Wire/blob/main/images/TSRIO-1W-01.png?raw=true" width="400px" alt="NotFitForPurpose Contraption 02. Image copyright (c) 21 December 2024 nofitnessforpurpose All Rights Reserved">
   </div>
 </div>
 <BR>
