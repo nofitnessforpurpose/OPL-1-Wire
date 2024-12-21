@@ -32,7 +32,7 @@ For a full list of 1-Wire capable devices, see the <a href="https://www.analog.c
 
 ## Limitations  
 The current iteration supports standard mode only.
-Where no Top Slot Rom is used, code accessing the Top Slot must reside on the internal A: storage location.
+Where no Top Slot ROM is used for the 1-Wire code base, code accessing the Top Slot must reside on the internal A: storage location.
 
 <BR>
 
