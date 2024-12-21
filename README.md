@@ -1,7 +1,11 @@
 # OPL 1-Wire
 Organiser II 1-wire code for Top Slot Retro I/O interface or compatible 5 volt COMMS interface to top slot.
 
-This <a href="https://en.wikipedia.org/wiki/Psion_Organiser">Psion Orgnaiser II</a> <a href="https://en.wikipedia.org/wiki/Open_Programming_Language">OPL progam</a> converts the XA.EXE Motorola S-File 6303 Cross Assembler ouptut .HEX files and converts them to machine code.
+This <a href="https://en.wikipedia.org/wiki/Psion_Organiser">Psion Orgnaiser II</a> <a href="https://en.wikipedia.org/wiki/Open_Programming_Language">OPL program</a> uses the Top Slot Retro IO Basic interface (or compatible COMMS 5 volt signals) to access <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> devices. Examples demonstrate accessing a 1-Wire DS18B20 temperature sensor, though any 1-Wire device can be accessed via the interface and supporting protocol.
+
+The Organiser II is also able to emulate a 1-Wire device via additional software.
+
+For a full list of 1-Wire capable devices, see the <a href="https://www.analog.com/en/product-category/1wire-devices.html">manufacturers</a> site.
 
 <div align="center">
   <div style="display: flex; align-items: flex-start;">
@@ -18,6 +22,7 @@ This <a href="https://en.wikipedia.org/wiki/Psion_Organiser">Psion Orgnaiser II<
 <br>  
 
 ## Use Case
+1-Wire is ideally suited to the Organiser II device as it is a low power half duplex system designed to support a large number of low power devices.
 
 <BR>
 
@@ -26,10 +31,13 @@ This <a href="https://en.wikipedia.org/wiki/Psion_Organiser">Psion Orgnaiser II<
 <BR>
 
 ## Limitations  
+The current iteration supports standard mode only.
+Where no Top Slot Rom is used, code accessing the Top Slot must reside on the internal A: storage location.
 
 <BR>
 
 ## Considerations
+External interfaces using power are limited to 30 mA maximum and should consider the power drain on Organiser II devices using limited battery power.
 
 <BR>
 
