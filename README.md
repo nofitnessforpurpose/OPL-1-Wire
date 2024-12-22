@@ -1,11 +1,5 @@
 # OPL 1-Wire
-Organiser II 1-wire code for Top Slot Retro I/O interface or compatible 5 volt COMMS interface to top slot.
-
-This <a href="https://en.wikipedia.org/wiki/Psion_Organiser">Psion Orgnaiser II</a> <a href="https://en.wikipedia.org/wiki/Open_Programming_Language">OPL program</a> uses the Top Slot Retro IO Basic interface (or compatible COMMS 5 volt signals) to access <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> devices. Examples demonstrate accessing a 1-Wire DS18B20 temperature sensor, though any 1-Wire device can be accessed via the interface and supporting protocol.
-
-The Organiser II is also able to emulate a 1-Wire device via additional software.
-
-For a full list of 1-Wire capable devices, see the <a href="https://www.analog.com/en/product-category/1wire-devices.html">manufacturers</a> site.
+Organiser II <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> code for Top Slot Retro I/O interface or compatible 5 volt COMMS interface to top slot.
 
 <div align="center">
   <div style="display: flex; align-items: flex-start;">
@@ -22,7 +16,13 @@ For a full list of 1-Wire capable devices, see the <a href="https://www.analog.c
 <br>  
 
 ## Use Case
-1-Wire is ideally suited to the Organiser II device as it is a low power half duplex system designed to support a large number of low power devices.
+1-Wire is ideally suited to the Organiser II device as it is a low power half duplex system, designed to support a large number of low power devices. Devices, e.g. Temperature sensors, clocks, authenticators, memory, a/d convertors etc. on a 1-Wire network are connected in parallel and can be addressed simultaneously or individually depending on the applicable mode.
+
+This <a href="https://en.wikipedia.org/wiki/Psion Organiser">Psion Organiser II</a> <a href="https://en.wikipedia.org/wiki/Open_Programming_Language">OPL program</a> uses the Top Slot Retro IO Basic interface (or compatible COMMS 5 volt signals) to access <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> devices. Examples demonstrate accessing a 1-Wire DS18B20 temperature sensor, though any 1-Wire device can be accessed via the interface and supporting protocol.
+
+The Organiser II is also able to emulate a 1-Wire device via additional software.
+
+For a full list of 1-Wire capable devices, see the <a href="https://www.analog.com/en/product-category/1wire-devices.html">manufacturers</a> site.
 
 <BR>
 
@@ -33,6 +33,7 @@ For a full list of 1-Wire capable devices, see the <a href="https://www.analog.c
 ## Limitations  
 The current iteration supports standard mode only.
 Where no Top Slot ROM is used for the 1-Wire code base, code accessing the Top Slot must reside on the internal A: storage location.
+As power for the 1-Wire network is sourced from the Top-Slot a 1-Wire transaction sequence must complete before accessing B: or C: storage locations.
 
 <BR>
 
