@@ -24,6 +24,8 @@ The Organiser II is also able to emulate a 1-Wire device via additional software
 
 For a full list of 1-Wire capable devices, see the <a href="https://www.analog.com/en/product-category/1wire-devices.html">manufacturers</a> site.
 
+Devices such as the ATTiny85, PIC family, CH32V003 or other microcontrollers can be configured with software to act as 1-Wire devices for additional sensors (Seperate power may be required).
+
 <BR>
 
 ## Discussion  
