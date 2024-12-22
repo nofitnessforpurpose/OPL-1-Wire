@@ -18,7 +18,7 @@ Organiser II <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> code fo
 ## Use Case
 1-Wire is ideally suited to the Organiser II device as it is a low power half duplex system, designed to support a large number of low power devices. Devices, e.g. Temperature sensors, clocks, authenticators, memory, a/d convertors etc. on a 1-Wire network are connected in parallel and can be addressed simultaneously or individually depending on the applicable mode.
 
-This <a href="https://en.wikipedia.org/wiki/Psion Organiser">Psion Organiser II</a> <a href="https://en.wikipedia.org/wiki/Open_Programming_Language">OPL program</a> uses the Top Slot Retro IO Basic interface (or compatible COMMS 5 volt signals) to access <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> devices. Examples demonstrate accessing a 1-Wire DS18B20 temperature sensor, though any 1-Wire device can be accessed via the interface and supporting protocol.
+This <a href="https://en.wikipedia.org/wiki/Psion Organiser">Psion Organiser II</a> <a href="https://en.wikipedia.org/wiki/Open_Programming_Language">OPL program</a> uses the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIOBasic">Top Slot Retro IO Basic</a> interface (or compatible COMMS 5 volt signals) to access <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> devices. Examples demonstrate accessing a 1-Wire DS18B20 temperature sensor, though any 1-Wire device can be accessed via the interface and supporting protocol.
 
 The Organiser II is also able to emulate a 1-Wire device via additional software.
 
