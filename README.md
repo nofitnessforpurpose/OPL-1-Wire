@@ -20,11 +20,18 @@ Organiser II <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> code fo
 
 This <a href="https://en.wikipedia.org/wiki/Psion Organiser">Psion Organiser II</a> <a href="https://en.wikipedia.org/wiki/Open_Programming_Language">OPL program</a> uses the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIOBasic">Top Slot Retro IO Basic</a> interface (or compatible COMMS 5 volt signals) to access <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> devices. Examples demonstrate accessing a 1-Wire DS18B20 temperature sensor, though any 1-Wire device can be accessed via the interface and supporting protocol.
 
-The Organiser II is also able to emulate a 1-Wire device via additional software.
+The Organiser II is also able to emulate a 1-Wire device via additional software.  
 
-For a full list of 1-Wire capable devices, see the <a href="https://www.analog.com/en/product-category/1wire-devices.html">manufacturers</a> site.
+For a full list of 1-Wire capable devices, see the <a href="https://www.analog.com/en/product-category/1wire-devices.html">manufacturers</a> site.  
 
-Devices such as the ATTiny85, PIC family, CH32V003 or other microcontrollers can be configured with software to act as 1-Wire devices for additional sensors (Seperate power may be required).
+Devices such as the ATTiny85, PIC family, CH32V003 or other microcontrollers can be configured with software to act as 1-Wire devices for additional sensors (Seperate power may be required).  
+
+<div align="center">
+  <div style="display: flex; align-items: flex-start;">
+  <img src="https://github.com/nofitnessforpurpose/OPL-1-Wire/blob/main/images/2025-01-01 22-31-31.gif?raw=true" width="238px" alt="NotFitForPurpose DS18B20. Image copyright (c) 21 December 2024 nofitnessforpurpose All Rights Reserved">
+  </div>
+</div>
+<BR>
 
 <BR>
 
