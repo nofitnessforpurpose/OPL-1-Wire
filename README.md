@@ -33,6 +33,30 @@ Devices such as the ATTiny85, PIC family, CH32V003 or other microcontrollers can
 </div>
 <BR>
 
+## Connection
+Connection to the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIOBasic"> Top Slot Retro IO Basic</a> requires a diode and resistor. A diode is connected between pin 3 ( D3 ){Andode} and pin 6 ( D4 )  {Cathode}.  A 4k7 resistor is connecteb between Pin 3 ( D3 ) and Pin 5 ( D0). Pin 4 ( D2 ) is not used and should be pulled low to ground.
+
+| Pin | Function | Circuit | 1-Wire Function |
+| --- | - | - | - |
+|  1  |  +5 V | No connection (+5 Volt Orgnaiser internal power) | |
+|  2  |  0 V | 0 V | 0 Volt ground reference | GND |
+|  3  | D3 |  Diode Anode & Pull Up resistor | 1-Wire Data Line | DQ |
+|  4  | D2 | Connect to ground refernce | |
+|  5  | D0 | Pull up ressitor Power + 5 Volt 30 mA 1-Wire power (for non parasitic devices) & Pull up resistor | Vdd (Power) |
+|  6  | D4 | Diode Cathode, 1-Wire current sink, connect to 1-Wire DQ via Diode Anode | |
+
+
+### Summary
+A standard DS18B20 1-Wire device is connected:  
+
+| Pin |  TSRIOB Pin | 1-Wire Function |
+| --- | - | - |
+|  1  | Pin 2 - 0 V | Ground reference|
+|  2  | Pin 3 - D3 | DQ line|
+|  3  | Pin 5 - D0 | Vdd (+ 5 volt power)|
+
+
+
 <BR>
 
 ## Discussion  
@@ -40,9 +64,10 @@ Devices such as the ATTiny85, PIC family, CH32V003 or other microcontrollers can
 <BR>
 
 ## Limitations  
-The current iteration supports standard mode only.
+The current iteration supports 1-Wire standard mode only.
+
 Where no Top Slot ROM is used for the 1-Wire code base, code accessing the Top Slot must reside on the internal A: storage location.
-As power for the 1-Wire network is sourced from the Top-Slot a 1-Wire transaction sequence must complete before accessing B: or C: storage locations.
+As power and data for the 1-Wire network is sourced from the Top-Slot thus internal data basu, a 1-Wire transaction sequence must complete before accessing B: or C: storage locations. 
 
 <BR>
 
