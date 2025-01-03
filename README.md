@@ -18,7 +18,7 @@ Organiser II <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> code fo
 ## Use Case
 1-Wire is ideally suited to the Organiser II device as it is a low power half duplex system, designed to support a large number of low power devices. Devices, e.g. Temperature sensors, clocks, authenticators, memory, a/d convertors etc. on a 1-Wire network are connected in parallel and can be addressed simultaneously or individually depending on the applicable mode.
 
-This <a href="https://en.wikipedia.org/wiki/Psion Organiser">Psion Organiser II</a> <a href="https://en.wikipedia.org/wiki/Open_Programming_Language">OPL program</a> uses the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIOBasic">Top Slot Retro IO Basic</a> interface (or compatible COMMS 5 volt signals) to access <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> devices. Examples demonstrate accessing a 1-Wire DS18B20 temperature sensor, though any 1-Wire device can be accessed via the interface and supporting protocol.
+This <a href="https://en.wikipedia.org/wiki/Psion Organiser">Psion Organiser II</a> <a href="https://en.wikipedia.org/wiki/Open_Programming_Language">OPL program</a> uses the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIOBasic">Top Slot Retro IO Basic</a> interface (or compatible COMMS, 5 volt signals) to access <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> devices. Examples demonstrate accessing a 1-Wire DS18B20 temperature sensor, though any 1-Wire device can be accessed via the interface and supporting protocol.
 
 The Organiser II is also able to emulate a 1-Wire device via additional software.  
 
@@ -36,14 +36,14 @@ Devices such as the ATTiny85, PIC family, CH32V003 or other microcontrollers can
 ## Connection
 Connection to the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIOBasic"> Top Slot Retro IO Basic</a> requires a diode and resistor. A diode is connected between pin 3 ( D3 ){Andode} and pin 6 ( D4 )  {Cathode}.  A 4k7 resistor is connecteb between Pin 3 ( D3 ) and Pin 5 ( D0). Pin 4 ( D2 ) is not used and should be pulled low to ground.
 
-| Pin | Function | Circuit | 1-Wire Function |
+| Pin | Function | Circuit & Comment | 1-Wire Function |
 | --- | - | - | - |
 |  1  |  +5 V | No connection (+5 Volt Orgnaiser internal power) | |
 |  2  |  0 V | 0 V | 0 Volt ground reference | GND |
 |  3  | D3 |  Diode Anode & Pull Up resistor | 1-Wire Data Line | DQ |
 |  4  | D2 | Connect to ground refernce | |
-|  5  | D0 | Pull up ressitor Power + 5 Volt 30 mA 1-Wire power (for non parasitic devices) & Pull up resistor | Vdd (Power) |
-|  6  | D4 | Diode Cathode, 1-Wire current sink, connect to 1-Wire DQ via Diode Anode | |
+|  5  | D0 | +5 Volt 30 mA 1-Wire power (for non parasitic devices) & Pull up resistor | Vdd (Power) |
+|  6  | D4 | Diode Cathode, 1-Wire current sink for DQ, connect to 1-Wire DQ via Diode Anode | |
 
 
 ### Summary
@@ -67,12 +67,12 @@ A standard DS18B20 1-Wire device is connected:
 The current iteration supports 1-Wire standard mode only.
 
 Where no Top Slot ROM is used for the 1-Wire code base, code accessing the Top Slot must reside on the internal A: storage location.
-As power and data for the 1-Wire network is sourced from the Top-Slot thus internal data basu, a 1-Wire transaction sequence must complete before accessing B: or C: storage locations. 
+As power and data for the 1-Wire network is sourced from the Top-Slot and uses the internal data bus, a 1-Wire transaction sequence must complete before accessing B: or C: storage locations. i.e. Calling POF:, or equivalent  to terminate Top Slot use.    
 
 <BR>
 
 ## Considerations
-External interfaces using power are limited to 30 mA maximum and should consider the power drain on Organiser II devices using limited battery power.
+External interfaces using power are limited to 30 mA maximum and should consider the power drain on Organiser II devices limited battery power.
 
 <BR>
 
