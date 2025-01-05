@@ -9,15 +9,7 @@ REM Date     : 21 Dec 2024
 REM Hardware : Top Slot Retro IO Basic
 
 REM See TSOF01.ASM
-REM - LDAA #^x00        ; Load a with 0
-REM - STAA m^x03        ; Write A (0) to PORT 2 - Set all data lines low
-REM - AIM  #^xFC,^x01   ; Port 1 DDR, Return Port 2 (Top Slot) as Inputs
-REM - LDAB #^x03        ; Select top slot
-REM - SWI  PK$PKOF      ; Turn off selected slot
-REM - LDX  #^x20C1      ; Load address of kbb_pkof
-REM - LDAA #^x01        ; Allow slot off value
-REM - STAA #^x00,X      ; Write A register to kbb_pkof
-REM - RTS
+
 REM
 PW$=CONV$:("8600970371FC01C6033F5BCE20C18601A70039")
 USR(ADDR(PW$) + 1, 0)
