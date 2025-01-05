@@ -1,0 +1,20 @@
+PON:
+GLOBAL PW$(20)
+REM Turn on Top Slot and keep slots powered
+
+REM (c) Copyright 2024 nofitnessforpurpose All Rights Reserved
+REM Revision : 0.11
+REM Author   : NotFitForPurpose
+REM Date     : 21 Dec 2024
+REM Hardware : Top Slot Retro IO Basic
+
+REM See TSON01.ASM
+REM - LDAB #^x03        ; Select top slot
+REM - SWI PK$SETP       ; Turn on selected slot
+REM - LDX #^x20C1       ; Load address of kbb_pkof
+REM - LDAA #^x00        ; Keep slot on value
+REM - STAA #0,X         ; Write A register to kbb_pkof
+REM - RTS
+REM
+PW$=CONV$:("C6033F62FE20C18600A70039")
+USR(ADDR(PW$) + 1, 0)

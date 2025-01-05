@@ -1,0 +1,58 @@
+CONV$:(H$)
+REM Supply an even length string comprising ASCII character pairs 
+REM representing hexadecimal numbers e.g. "A19F01"
+
+REM Returns a string containing machine Code values from Hex string values
+
+REM Source   : Adapted from Psion II Machine Code Tutorial, Part 1
+REM Revision : 0.1 
+REM Modified : NotFitForPurpose
+REM Date     : 30 Nov 2024
+
+REM ATRAN does not like spaces before % ASCII to Integer conversion
+
+LOCAL m$(127), C$(1), c%, d%, e%, l%
+
+l% = LEN(H$) - 1
+IF (l% + 1) AND 1
+  REM Odd length of string is invalid
+  CLS
+  PRINT "Hex src err."
+  VIEW(2, "Hex str len err."+H$)
+  GET
+  STOP
+ENDIF
+
+REM Loop through the supplied Hex codes in H$
+WHILE (l% >= 1)
+  REM Extract two characters representing a Hex byte
+  c% = ASC(MID$(H$, l%, 1))
+  d% = ASC(MID$(H$, l% + 1, 1))
+  
+  IF (c%>%9)
+    c% = c% - 55 : REM Adjust A to F to Decimal
+  ELSE
+    c% = c% -%0
+  ENDIF
+  IF (d%>%9)
+    d% = d% - 55 : REM Adjust A to F to Decimal
+  ELSE
+    d% = d% -%0 : REM Subtract ASCII value offset
+  ENDIF
+  
+  e% = ((c% * 16) + d%) : REM Calculate decimal value of hex character pair
+  IF (e% > 255) : REM Invalid hex character check e.g. lower case or digit capture
+    CLS
+    PRINT "Hex src err"
+    PRINT "Loc:", l%, " Str:", MID$(H$, l%, 2)
+    GET
+    STOP
+  ENDIF
+  
+  REM Build the machine code into m$
+  m$ = CHR$(e%) + m$ 
+  l% = l% - 2
+ENDWH : REM <-- End of iterating through Hex code
+
+REM Return a string containing the machine code
+RETURN m$

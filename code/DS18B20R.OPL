@@ -1,0 +1,47 @@
+DS18B20R:(SP$)
+REM Convert DS18B20 Scratch pad to Resolution
+
+REM Byte 4 of the scratch pad memory contains the configuration register
+
+REM (c) Copyright 2024 nofitnessforpurpose All Rights Reserved
+REM Revision : 0.1
+REM Modified : NotFitForPurpose
+REM Date     : 30 Nov 2024
+
+REM +----+----+----+----+----+----+----+----+
+REM : B0 : B1 : B2 : B3 : B4 : B5 : B6 : B7 :
+REM +---------------------------------------+
+REM B0 = Temperature LSB
+REM B1 = Temperature MSB
+REM B2 = th Register 
+REM B3 = tl Register 
+REM B4 = Configuration Register
+REM B5 = Reserved ($FF)
+REM B6 = Reserved
+REM B7 = Reserved ($10)
+REM B8 = CRC
+
+LOCAL b% : REM Scaling setting
+LOCAL r : REM  resolution
+LOCAL t
+
+REM Verify checksum
+
+
+t = (ASC(MID$(SP$, 2, 1)) * 256) + ASC(MID$(SP$, 1, 1))
+
+REM Get resolution from B4 of the Scratch Pad B4 bits 5 and 6
+b% = ASC(MID$(SP$, 5, 1)) AND 96
+
+REM Scale the raw values to temperature in Deg. C
+IF b% = 96
+  r = 12 : REM    12 Bit
+ELSEIF b% = 64
+  r = 11 : REM    11 Bit
+ELSEIF b% = 32
+  r = 10 : REM    10 Bit
+ELSEIF b% = 0
+  r = 9 : REM      9 Bit
+ENDIF
+
+RETURN r

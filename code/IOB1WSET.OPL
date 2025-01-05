@@ -1,0 +1,18 @@
+IOBSET1W:
+REM Set enable on basic I/0
+REM Pack is selected e.g. via PON
+REM Note Top Slot remains active
+
+REM (c) Copyright 2024 nofitnessforpurpose All Rights Reserved
+REM Revision : 0.1 
+REM Modified : NotFitForPurpose
+REM Date     : 30 Nov 2024
+REM Hardware : Top Slot Retro IO Basic
+
+REM See IOB1WSET.ASM
+
+LOCAL A%
+LOCAL M$(20)
+
+M$=CONV$:("72401772081771BF1772030172110339")
+A%=USR(ADDR(M$)+1,0)

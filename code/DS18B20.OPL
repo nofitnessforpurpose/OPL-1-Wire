@@ -1,0 +1,120 @@
+ds18b20:
+REM Basic test of 1-Wire network
+REM Single device on bus e.g. DS18B20
+
+REM (c) Copyright 2024 nofitnessforpurpose All Rights Reserved
+REM Revision : 0.2
+REM Modified : NotFitForPurpose
+REM Date     : 31 Dec 2024
+REM Hardware : Top Slot Retro IO Basic
+
+REM Routines report status using 8 right most characters on lines 1 & 2
+
+REM Run from A: or D:
+
+
+LOCAL s% : REM Status result
+LOCAL d$(16) : REM Data
+
+AT 1, 1
+REM    1234567890123456
+PRINT "1-Wire :        ";
+PRINT "Status :        ";
+
+REM Is code on A:
+REM Enable top slot with power kept on
+AT 9, 1
+REM    12345678
+PRINT "Slot ON "
+PON:
+IOB1WSET:
+AT 9, 2
+PRINT "        "
+
+REM Send 1-Wire reset pulse to set all devices listening
+AT 9, 1
+PRINT "Search  "
+s% = ONEWRST:
+AT 9, 2
+IF (s% = 0)
+  PRINT "ACK     "
+ELSE
+  PRINT "NACK    "
+  VIEW(2, "1-Wire device not detected, check interface and connections")
+  STOP
+ENDIF
+
+REM Assume network comprises a single device
+AT 9, 1
+PRINT "Skip ROM"
+SND1WBYT:($CC)
+AT 9, 2
+PRINT "        "
+
+REM Initiate conversion in 1-Wire device
+AT 9, 1
+PRINT "Convert "
+SND1WBYT:($44)
+REM Allow for longest 12 bit conversion
+AT 9, 2
+PRINT "Working "
+PAUSE 10
+
+REM Post conversion reset
+AT 9, 1
+PRINT "Reset   "
+AT 9, 2
+PRINT "        "
+s% = ONEWRST:
+AT 9, 2
+IF (s% = 0)
+  PRINT "ACK     "
+ELSE
+  PRINT "NACK    "
+  VIEW(2, "1-Wire device not detected, check interface and connections")
+  STOP
+ENDIF
+REM Skip ROM
+SND1WBYT:($CC)
+AT 9, 1
+REM    12345678
+PRINT "Sel ScPd"
+AT 9, 2
+PRINT "        "
+SND1WBYT:($BE)
+
+REM Read Scratch pad
+AT 9, 1
+PRINT "Rd Bytes"
+AT 9, 2
+d$=RD1WSPD$:
+IF d$ = REPT$(CHR$(0),9)
+  VIEW(2,"1-Wire Interface or device not connected")
+  STOP
+ENDIF
+PRINT LEN(d$),"Bytes"
+PAUSE 1
+
+REM 1-Wire transactions complete
+AT 9, 1
+REM    12345678
+PRINT "Slot OFF"
+POF:
+AT 9, 2
+PRINT "        "
+
+AT 9, 1
+PRINT "CRC Chk."
+AT 9, 2
+IF (onewcrc:(d$) = 0)
+  PRINT "CRC OK  "
+ELSE
+  PRINT "CRC ERR "
+  PAUSE 20
+ENDIF
+
+AT 9, 1
+PRINT "Reading "
+AT 9, 2
+PRINT FIX$(DS18B20T:(d$), 2, 5),"C"
+PAUSE 50
