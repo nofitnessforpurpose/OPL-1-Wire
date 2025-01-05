@@ -60,6 +60,12 @@ A standard DS18B20 1-Wire device is connected:
 <BR>
 
 ## Discussion  
+The files must be run from the A: or D: drive during the period over which the Top Slot is active.  
+
+Only the OPL files are required along with the interface, the assembly files are not required.  
+
+### Running
+Copy the OPL files to the A: drive and run DS18B20 when a 1-Wire temperature sensor is connected as described above.  
 
 <BR>
 
