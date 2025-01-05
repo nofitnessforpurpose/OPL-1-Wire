@@ -1,0 +1,195 @@
+RECBYTS.ASM                            XA6301 ASSEMBLER V3.1                             05/JAN/2025 19:20:41  PAGE:    1
+
+ 1                                      /****************************************************************/
+ 2                                      /*								*/
+ 3                                      /*	1-Wire - Read Bytes   					*/
+ 4                                      /*	(c) NoFitnessForPurpose					*/
+ 5                                      /*								*/
+ 6                                      /*								*/
+ 7                                      /*		Rev 0.10	11/12/2024			*/
+ 8                                      /*								*/
+ 9                                      /****************************************************************/
+ 10                                     ;
+ 11                                     ;---------------------------------------
+ 12                                     ;
+ 13                                     ; Entry to the routine the D register is supplied with the string location
+ 14                                     ; Exit from the routine returns the start of the string address in the X register
+ 15                                     ;
+ 16                                     ;-------------------------------------------------------------------------------
+ 17                                     ; Assumes Top Slot is already powered
+ 18                                     ;
+ 19                                     ;
+ 20                                     ;          Top Slot Connector
+ 21                                     ;          15 13 11  9  7  5  3  1
+ 22                                     ;          16 14 12 10  8  6  4  2 
+ 23                                     ;
+ 24                                     ;          Pin 	Signal 	Description
+ 25                                     ;          1 	SD7 	Data Bit 7
+ 26                                     ;          2 	SD0 	Data Bit 0
+ 27                                     ;          3 	SD6 	Data Bit 6
+ 28                                           ;          4 	SD1 	Data Bit 1
+ 29                                     ;          5 	SD5 	Data Bit 5
+ 30                                     ;          6 	SD2 	Data Bit 2
+ 31                                     ;          7 	SD4 	Data Bit 4
+ 32                                     ;          8 	SD3 	Data Bit 3
+ 33                                     ;          9 	GND 	0 Volts
+ 34                                     ;          10 	SCK 	Serial clock
+ 35                                     ;          11 	SVB 	External Power Input / Battery Output Voltage - 0.6 Volt
+ 36                                     ;          12 	SS3 	Slot Select 3
+ 37                                     ;          13 	SCVV 	+5 Volts
+ 38                                     ;          14 	AC 	External On/Clear
+ 39                                     ;          15 	SOE 	Output enable
+ 40                                     ;          16 	SMR 	Master Reset
+ 41                                     ;
+ 42                                     ;
+ 43                                     ;
+ 44                                     ;          Port 6 - Data Register $17
+ 45                                     ;          bit 7	PACON_B
+ 46                                     ;          bit 6	SS3_B
+ 47                                     ;          bit 5	SS2_B
+ 48                                     ;          bit 4	SS1_B
+ 49                                     ;	   bit 3	SOE_B
+ 50                                     ;	   bit 2	SPGM_B
+ 51                                     ;	   bit 1	SMR
+ 52                                     ;	   bit 0	SCK	
+ 53                                     ;
+ 54                                     ;    
+ 55                                     ;                                                                               
+ 56                                     ;-------------------------------------------------------------------------------
+ 57                                     ; CPU Register configuration
+RECBYTS.ASM                            XA6301 ASSEMBLER V3.1                             05/JAN/2025 19:20:41  PAGE:    2
+
+ 58                                     ;
+ 59                                     ;               High Byte             Low Byte
+ 60                                     ;          +-----------------+   +-----------------+
+ 61                                     ;          |        A        |   |       B         | Accumulator               
+ 62                                     ;          | 7 6 5 4 3 2 1 0 |   | 7 6 5 4 3 2 1 0 |
+ 63                                     ;          +-----------------+---+-----------------+
+ 64                                     ;          |                   D                   | or 16 bit Accumulator     
+ 65                                     ;          +---------------------------------------+
+ 66                                     ;          +---------------------------------------+
+ 67                                     ;          |                   X                   |                            
+ 68                                     ;          +---------------------------------------+
+ 69                                     ;          +---------------------------------------+
+ 70                                     ;          |                   SP                  |                            
+ 71                                     ;          +---------------------------------------+
+ 72                                     ;          +---------------------------------------+
+ 73                                     ;          |                   PC                  |
+ 74                                     ;          +---------------------------------------+
+ 75                                     ;                                +-----------------+
+ 76                                     ;                                |  1 H I N Z V C  | CCR Condition Code Reg.   
+ 77                                     ;                                +-----------------+
+ 78                                     ;                                    : : : : : :                              
+ 79                                     ;                                    : : : : : +---- Carry                     
+ 80                                     ;                                    : : : : +------ Over flow                 
+ 81                                     ;                                    : : : +-------- Zero                      
+ 82                                     ;                                    : : +---------- Negative                  
+ 83                                     ;                                    : +------------ Interrupt                 
+ 84                                     ;                                    +-------------- Half carry      
+ 85                                     ;   
+ 86                                     ;-------------------------------------------------------------------------------;
+ 87                                       ;
+ 88                                     ; Pin  Func
+ 89                                     ;  1  	+5v
+ 90                                     ;  2  	0v
+ 91                                     ; *3  	D3 - I/P - 8
+ 92                                     ;  4  	D2 - I/P - 4
+ 93                                     ;  5  	D0 - I/P - 1
+ 94                                     ; *6  	D4 - I/P - 16
+ 95                                     ;
+ 96                                     #include "osvars.inc"
+#1                                      /******************************************************************************/
+#2                                      /*								    	      */
+#3                                      /*    written on..........28/OCT/85					      */
+#4                                      /*    written by..........BILL					  	      */
+#5                                      /*    version no..........1.0						      */
+#6                                      /*									      */
+#7                                      /*    Contains the MKII operating system variables.			      */
+#8                                      /******************************************************************************/
+#9                                      
+#10                                     	.list
+ 102                                    #include "swi.inc"
+#1                                      /******************************************************************************/
+#2                                      /*								    	      */
+#3                                      /*    written on..........28/OCT/85					      */
+#4                                      /*    written by..........BILL					  	      */
+#5                                      /*    version no..........1.0						      */
+#6                                      /*									      */
+#7                                      /*    Contains the MK2 SWI's.						      */
+RECBYTS.ASM                            XA6301 ASSEMBLER V3.1                                                                        05/JAN/2025 19:20:41  PAGE:    3
+
+#8                                      /******************************************************************************/
+#9                                      	.list
+ 104                                    
+ 105   0000 ->00000000                  	.org 000
+ 106                                    	.radix 10
+ 107                                    
+ 108                                    ;
+ 109                                    ;
+ 110   0000                             start:
+ 111                                    ;
+ 112                                    ;	Top slot activated and DDR for port 2 configured as o/p
+ 113                                    ;       Note port is left powered on purpose
+ 114                                    ;       A is a local register, trashed as needed
+ 115                                    ;	D register is supplied with string buffer address when routine called
+ 116                                    ;       X points to the string where bits are stored - supplied to this routine
+ 117                                    ;	The first byte (not length byte) is the number of bits to be read
+ 118                                    ;       Make sure X is longer than B - bits
+ 119                                    
+ 120   0000 18                          	xgdx			; Swap the D register into the X register - D is buffer string address
+ 121   0001 3C                          	pshx			; +SP1 - Store the X register to return to calling routine on exit
+ 122   0002 E6 01                       	lda	b,^x01,X	; load b with the number of bits to read from input string
+ 123                                    
+ 124   0004                             nextbit:
+ 125   0004 08                          	inx			; Point to next string location to store a read bit at
+ 126   0005 5A                          	dec	b		; Decrement b and test to see if we have read all the bits
+ 127   0006 27 00-                                       	beq	exit		; If B=0 we have received all bits needed
+ 128   0008 20 00-                      	bra	one		; Read a bit - Reads at least 1 bit or line state
+ 129   000A 01                                  nop
+ 130   000B 01                                  nop
+ 131                                    
+ 132   000C                             one:
+ 133                                    	; Set 1 to 15 uS pulse low followed by 55 uS delay (65 uS total)
+ 134   000C 86 EF                       	lda	a,#^xEF		; load a with value to set D4 low
+ 135   000E 97 03                       	sta	a,POB_PORT2:	; 	        
+ 136                                    
+ 137   0010 86 01                       	lda	a,#^x01		; Short period low  - ~15 uS low including code overhead
+ 138   0012                             loop1:	
+ 139   0012 4A                          	dec	a
+ 140   0013 26 FD                       	bne	loop1		; if count not reached keep looping ~4 uS per loop
+ 141   0015 86 FF                       	lda	a,#^xFF		; Set line high for remainder of period - also allows read of bit
+ 142   0017 97 03                       	sta	a,POB_PORT2:
+ 143                                    
+ 144   0019 01                          	nop		        ; At ~1 uS per nop  = 5 uS plus code overhead + 7 uS
+ 145   001A 01                                  nop
+ 146   001B 01                                  nop
+ 147   001C 01                                  nop
+ 148   001D 01                                  nop
+ 149   001E                                  loop2:
+ 150                                    
+ 151   001E 96 03                       	lda	a,POB_PORT2:	; Read the top slot port
+ 152   0020 01                                  nop
+ 153   0021 01                                  nop
+ 154   0022 01                                  nop
+ 155   0023 01                                  nop
+ 156   0024 01                                  nop
+ 157   0025 01                                  nop
+ 158   0026 A7 01                               sta     a,^01,x         ; store the byte into the string
+RECBYTS.ASM                            XA6301 ASSEMBLER V3.1                             05/JAN/2025 19:20:41  PAGE:    4
+
+ 159                                    				; - Allow a period for the target to complete its bit period
+ 160   0028 86 06                       	lda	a,#^x06		; At ~4 uS per loop 12 counts = 24 uS plus code overhead + 7 uS
+ 161   002A                             loop3:
+ 162   002A 4A                          	dec	a
+ 163   002B 26 FD                       	bne	loop3		; If count not reached keep looping ~4 uS per loop
+ 164   002D 20 D5                               bra	nextbit		; send next bit or exit
+ 165                                    
+ 166   002F                             exit:		
+ 167   002F 38                          	pulx			; -S1 - Return the string address
+ 168   0030 39                          	rts			; return to OPL
+ 169                                    ;
+ 170                                    .end
+
+                WARNINGS  = 0
+                ERRORS    = 0
+                PACK SIZE = 49

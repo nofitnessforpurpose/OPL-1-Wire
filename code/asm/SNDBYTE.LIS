@@ -1,0 +1,138 @@
+SNDBYTE.ASM                            XA6301 ASSEMBLER V3.1                             05/JAN/2025 19:20:47  PAGE:    1
+
+ 1                                      /****************************************************************/
+ 2                                      /*								*/
+ 3                                      /*	Sendbyte 						*/
+ 4                                      /*	(c) NoFitnessForPurpose					*/
+ 5                                      /*								*/
+ 6                                      /*								*/
+ 7                                      /*		Rev 0.10	23/12/2024			*/
+ 8                                      /*								*/
+ 9                                      /****************************************************************/
+ 10                                     ;
+ 11                                     ;---------------------------------------
+ 12                                     ;
+ 13                                     ; Entry to the routine the D register is supplied with the string location
+ 14                                     ; Exit from the routine returns the CRC in the lower byte of the X register
+ 15                                     ;
+ 16                                     ;-------------------------------------------------------------------------------
+ 17                                     ;		
+ 18                                     ; See 	https://www.jaapsch.net/psion/tech04.htm#p4.2
+ 19                                     ;     	DATA BUS (PROCESSOR PORT 2)
+ 20                                     ;     	https://www.jaapsch.net/psion/tech04.htm#p4.5
+ 21                                     ;     	CONTROL LINES (PROCESSOR PORT 6)
+ 22                                     ;
+ 23                                     ; PORT 2 DDR address 0x0001
+ 24                                     ; PORT 2 State address 0x0003
+ 25                                     ;
+ 26                                     ; PORT 2
+ 27                                     ; *3  D3 - I/P - 8  - 0x08
+ 28                                     ;  4  D2 - I/P - 4  - 0x04
+ 29                                     ;  5  D0 - O/P - 1  - 0x01
+ 30                                     ; *6  D4 - O/P - 16 - 0x10
+ 31                                     ;---------------------------------------
+ 32                                     ;
+ 33                                     #include "osvars.inc"		; Contains the MKII operating system variables.
+#1                                      /******************************************************************************/
+#2                                      /*								    	      */
+#3                                      /*    written on..........28/OCT/85					      */
+#4                                      /*    written by..........BILL					  	      */
+#5                                      /*    version no..........1.0						      */
+#6                                      /*									      */
+#7                                      /*    Contains the MKII operating system variables.			      */
+#8                                      /******************************************************************************/
+#9                                      
+#10                                     	.list
+ 39                                     #include "swi.inc"			; Contains the MK2 SWI's. (Software Interrupt Vectors)
+#1                                      /******************************************************************************/
+#2                                      /*								    	      */
+#3                                      /*    written on..........28/OCT/85					      */
+#4                                      /*    written by..........BILL					  	      */
+#5                                      /*    version no..........1.0						      */
+#6                                      /*									      */
+#7                                      /*    Contains the MK2 SWI's.						      */
+#8                                      /******************************************************************************/
+#9                                      	.list
+ 41                                     
+ 42                                     ; Default config options
+ 43                                     ;
+ 44    0000 ->00000000                  	.org 000		; Sets address assembly will start (or continue)
+SNDBYTE.ASM                            XA6301 ASSEMBLER V3.1                             05/JAN/2025 19:20:47  PAGE:    2
+
+ 45                                     	.radix 10		; Sets the default base used by the assembler
+ 46                                     ;
+ 47                                     
+ 48                                     ;
+ 49    0000                             start:
+ 50                                     ;
+ 51                                     ;-------------------------------------------------------------------------------
+ 52    0000                             sndbyte:
+ 53                                     ;	Assumes
+ 54                                     ;	Top slot activated and DDR for port 2 configured as o/p
+ 55                                     ;       Note port is left powered on purpose
+ 56                                     ;       A is a local register, trashed as needed
+ 57                                     ;       B holds the character byte to be sent
+ 58                                     ;       X is configured as a bit counter
+ 59                                     
+ 60                                     
+ 61    0000 CE 0009                     	ldx	#^x0009		; Set the bit counter in X to 8 bits + 1 to send
+ 62                                     	
+ 63                                     ; - nextbit
+ 64    0003                             21$:
+ 65    0003 09                          	dex			; Decrement X and test to see if we have sent all the bits
+ 66    0004 27 00-                      	beq	27$		; If X=0 we have Sent all bits exit the routine
+ 67                                     
+ 68    0006 C5 01                       	bit	b,#^x01		; Test the least significant bit of B (send LSB to MSB)
+ 69    0008 26 00-                      	bne	22$		; It's a one so jump to send a one bit
+ 70    000A 20 00-                      	bra	25$		; It was a zero so jump to send a zero bit
+ 71                                     
+ 72                                     ;- one
+ 73    000C                             22$:
+ 74                                     	; Set 1 to 15 uS pulse low followed by 55 uS delay (65 uS total)
+ 75    000C 86 EF                       	lda	a,#^xEF		; load a with value to set D4 low
+ 76    000E 97 03                       	sta	a,POB_PORT2:	; ~ 15 uS low including code overhead
+ 77                                     	        
+ 78    0010 86 01                       	lda	a,#^x01		; Short period low
+ 79                                     ; - loop counter
+ 80    0012 4A                          23$:	dec	a
+ 81    0013 26 FD                       	bne	23$		; if count not reached keep looping ~2 uS per loop
+ 82    0015 86 FF                       	lda	a,#^xFF		; Set line high for remainder of period
+ 83    0017 97 03                       	sta	a,POB_PORT2:
+ 84                                     
+ 85    0019 86 0B                       	lda	a,#^x0B		; At 4 uS per loop 12 counts = 48 uS plus code overhead + 7 uS
+ 86                                     ; - loop counter
+ 87    001B 4A                          24$:	dec	a
+ 88    001C 26 FD                       	bne	24$		; if count not reached keep looping ~2 uS per loop
+ 89    001E 56                          	ror	b		; rotate B so the next bit is ready to send
+ 90    001F 20 E2                       	bra	21$             ; send next bit or exit
+ 91                                     
+ 92                                     ; - zero
+ 93    0021                             25$:
+ 94                                     	; Set 60 uS pulse low followed by 60 to 120 + 5 uS
+ 95    0021 86 EF                       	lda 	a,#^xEF		; load a with value to set D4 low
+ 96    0023 97 03                       	sta	a,POB_PORT2:	; 120 uS low including code overhead
+ 97                                     
+ 98    0025 86 1C                       	lda	a,#^x1C	        ; At 4 uS per loop 28 counts =  112 uS plus code overhead + 7 uS
+ 99                                     ; - loop counter
+ 100   0027 4A                          26$:	dec	a
+ 101   0028 26 FD                       	bne	26$	        ; if count not reached keep looping ~2 uS per loop
+SNDBYTE.ASM                            XA6301 ASSEMBLER V3.1                             05/JAN/2025 19:20:47  PAGE:    3
+
+ 102   002A 86 FF                       	lda	a,#^xFF
+ 103   002C 97 03                       	sta	a,POB_PORT2:		
+ 104                                    
+ 105   002E 56                          	ror	b		; rotate B so the next bit is ready to send
+ 106   002F 20 D2                               bra	21$             ; send next bit or exit
+ 107                                    
+ 108                                    ; - exit
+ 109   0031                             27$:		
+ 110   0031 39                                 	rts         	   	; Return (to OPL).
+ 111                                    ;-------------------------------------------------------------------------------
+ 112                                    
+ 113                                    
+ 114                                    ;
+ 115                                    	.end
+
+                WARNINGS  = 0
+                ERRORS    = 0
+                PACK SIZE = 50

@@ -1,0 +1,140 @@
+ONEWRST.ASM                            XA6301 ASSEMBLER V3.1                             05/JAN/2025 19:20:35  PAGE:    1
+
+ 1                                      /****************************************************************/
+ 2                                      /*								*/
+ 3                                      /*	One Wire Reset Pulse				*/
+ 4                                      /*	(c) NotForPurpose					*/
+ 5                                      /*								*/
+ 6                                      /*								*/
+ 7                                      /*		Rev 0.10	22/12/2024			*/
+ 8                                      /*								*/
+ 9                                      /****************************************************************/
+ 10                                     ;
+ 11                                     ; Create a 1-Wire reset pulse and returns the status
+ 12                                     ; Assumes Top slot selected and interface set (PON & IOB1WSET)
+ 13                                     ;
+ 14                                     ;---------------------------------------
+ 15                                     ;		
+ 16                                     ; See 	https://www.jaapsch.net/psion/tech04.htm#p4.2
+ 17                                     ;     	DATA BUS (PROCESSOR PORT 2)
+ 18                                     ;     	https://www.jaapsch.net/psion/tech04.htm#p4.5
+ 19                                     ;     	CONTROL LINES (PROCESSOR PORT 6)
+ 20                                     ;
+ 21                                     ; PORT 2 DDR address 0x0001
+ 22                                     ; PORT 2 State address 0x0003
+ 23                                     ;
+ 24                                     ; PORT 2
+ 25                                     ; *3  D3 - I/P - 8  - 0x08
+ 26                                     ;  4  D2 - I/P - 4  - 0x04
+ 27                                     ;  5  D0 - O/P - 1  - 0x01
+ 28                                     ; *6  D4 - O/P - 16 - 0x10
+ 29                                           ;---------------------------------------
+ 30                                     ;
+ 31                                     ; Note the original macro assembler is broken for oim and aim hence .byte
+ 32                                     ;
+ 33                                     ;-------------------------------------------------------------------------------
+ 34                                     ;
+ 35                                     ;-------------------------------------------------------------------------------
+ 36                                     ; CPU Register configuration
+ 37                                     ;
+ 38                                     ;          +-----------------+   +-----------------+
+ 39                                     ;          |        A        |   |       B         | Accumulator               
+ 40                                     ;          | 7 6 5 4 3 2 1 0 |   | 7 6 5 4 3 2 1 0 |
+ 41                                     ;          +-----------------+---+-----------------+
+ 42                                     ;          |                   D                   | or 16 bit Accumulator     
+ 43                                     ;          +---------------------------------------+
+ 44                                     ;          +---------------------------------------+
+ 45                                     ;          |                   X                   |                            
+ 46                                     ;          +---------------------------------------+
+ 47                                     ;          +---------------------------------------+
+ 48                                     ;          |                   SP                  |                            
+ 49                                     ;          +---------------------------------------+
+ 50                                     ;          +---------------------------------------+
+ 51                                     ;          |                   PC                  |
+ 52                                     ;          +---------------------------------------+
+ 53                                     ;                                +-----------------+
+ 54                                     ;                                |  1 H I N Z V C  | CCR Condition Code Reg.   
+ 55                                     ;                                +-----------------+
+ 56                                     ;                                    : : : : : :                              
+ 57                                     ;                                    : : : : : +---- Carry                     
+ONEWRST.ASM                            XA6301 ASSEMBLER V3.1                             05/JAN/2025 19:20:35  PAGE:    2
+
+ 58                                     ;                                    : : : : +------ Over flow                 
+ 59                                     ;                                    : : : +-------- Zero                      
+ 60                                     ;                                    : : +---------- Negative                  
+ 61                                     ;                                    : +------------ Interrupt                 
+ 62                                     ;                                    +-------------- Half carry      
+ 63                                     ;   
+ 64                                     ;-------------------------------------------------------------------------------
+ 65                                     ;
+ 66                                     #include "osvars.inc"
+#1                                      /******************************************************************************/
+#2                                      /*								    	      */
+#3                                      /*    written on..........28/OCT/85					      */
+#4                                      /*    written by..........BILL					  	      */
+#5                                      /*    version no..........1.0						      */
+#6                                      /*									      */
+#7                                      /*    Contains the MKII operating system variables.			      */
+#8                                      /******************************************************************************/
+#9                                      
+#10                                     	.list
+ 72                                     #include "swi.inc"
+#1                                      /******************************************************************************/
+#2                                      /*								    	      */
+#3                                      /*    written on..........28/OCT/85					      */
+#4                                      /*    written by..........BILL					  	      */
+#5                                      /*    version no..........1.0						      */
+#6                                      /*									      */
+#7                                      /*    Contains the MK2 SWI's.						      */
+#8                                      /******************************************************************************/
+#9                                      	.list
+ 74                                     
+ 75    0000 ->00000000                  	.org 000
+ 76                                     	.radix 10
+ 77                                     ;
+ 78                                     ;
+ 79    0000                             start:
+ 80                                     
+ 81    0000                             rsp:                            ; Send reset pulse
+ 82                                     
+ 83    0000 71 EF 03                    	aim 	#^xEF,POB_PORT2: ; PORT 2 - D4 Pull line low for reset using AND to only clear 4
+ 84                                     
+ 85                                     
+ 86    0003 86 6B                       	lda	a,#^x6B		; Load a with 480 uS delay count at 4.5 uS per iteration
+ 87                                     ;resetlow
+ 88    0005                             11$:
+ 89    0005 4A                          	dec 	a
+ 90    0006 26 FD                       	bne 	11$		; If not zero count keep looping ~ 4uS per loop
+ 91                                                              	; D3 High - Set Top Slot As Input allowing line to float as inputs
+ 92    0008 72 10 03                    	oim 	#^x10,POB_PORT2: ;
+ 93                                     
+ 94                                     	
+ 95                                     				; Post reset delay pulse
+ 96    000B 86 1A                       	lda	a,#^x1A		; A as loop ctr > 28 uS - Post Rst Pls Prd i.e. tPDH
+ 97                                                                     ; postrst
+ 98                                     
+ 99    000D                             12$:
+ 100   000D 4A                          	dec 	a
+ 101   000E 26 FD                       	bne 	12$		; If not zero count keep looping ~ 4uS per loop
+ONEWRST.ASM                            XA6301 ASSEMBLER V3.1                                                                            05/JAN/2025 19:20:35  PAGE:    3
+
+ 102                                    		
+ 103   0010 D6 03                       	lda	b,^x03:		; Rd Port %03 - 
+ 104   0012 C4 08                       	and 	b,#^x08		; Was D3 pulled low
+ 105   0014 37                          	psh	b		; +S1 - store result on stack
+ 106                                    
+ 107                                    				; 500 uS Post test recharge
+ 108   0015 86 6F                               	lda 	a,#^x6F
+ 109   0017                             13$:
+ 110   0017 4A                          	dec 	a
+ 111   0018 26 FD                       	bne 	13$		; If not zero count keep looping ~ 4uS per loop
+ 112                                    
+ 113   001A 33                          	pul	b		; -S1 = Retrieve result from stack - returned to OPL
+ 114   001B 18                                  xgdx		        ; swap the D and X register to return the result in the X register to OPL
+ 115   001C 39                          	rts            	        ; Return (to OPL).
+ 116                                    
+ 117                                    .end
+
+                WARNINGS  = 0
+                ERRORS    = 0
+                PACK SIZE = 29

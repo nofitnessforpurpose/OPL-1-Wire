@@ -1,0 +1,132 @@
+ONEWCRC.ASM                            XA6301 ASSEMBLER V3.1                             05/JAN/2025 19:20:30  PAGE:    1
+
+ 1                                      /****************************************************************/
+ 2                                      /*								*/
+ 3                                      /*	Maxim 1-Wire CRC for OPL-1-Wire				*/
+ 4                                      /*	(c) NotForPurpose					*/
+ 5                                      /*								*/
+ 6                                      /*								*/
+ 7                                      /*		Rev 0.10	04/01/2024			*/
+ 8                                      /*								*/
+ 9                                      /****************************************************************/
+ 10                                     ;
+ 11                                     ;---------------------------------------
+ 12                                     ;
+ 13                                     ; Entry to the routine the D register is supplied with the string location
+ 14                                     ; Exit from the routine returns the CRC in the lower byte of the X register
+ 15                                     ;
+ 16                                     ;-------------------------------------------------------------------------------
+ 17                                     ; CPU Register configuration
+ 18                                     ;
+ 19                                     ;               High Byte             Low Byte
+ 20                                     ;          +-----------------+   +-----------------+
+ 21                                     ;          |        A        |   |       B         | Accumulator               
+ 22                                     ;          | 7 6 5 4 3 2 1 0 |   | 7 6 5 4 3 2 1 0 |
+ 23                                     ;          +-----------------+---+-----------------+
+ 24                                     ;          |                   D                   | or 16 bit Accumulator     
+ 25                                         ;          +---------------------------------------+
+ 26                                     ;          +---------------------------------------+
+ 27                                     ;          |                   X                   |                            
+ 28                                     ;          +---------------------------------------+
+ 29                                     ;          +---------------------------------------+
+ 30                                     ;          |                   SP                  |                            
+ 31                                     ;          +---------------------------------------+
+ 32                                     ;          +---------------------------------------+
+ 33                                     ;          |                   PC                  |
+ 34                                     ;          +---------------------------------------+
+ 35                                     ;                                +-----------------+
+ 36                                     ;                                |  1 H I N Z V C  | CCR Condition Code Reg.   
+ 37                                     ;                                +-----------------+
+ 38                                     ;                                    : : : : : :                              
+ 39                                     ;                                    : : : : : +---- Carry                     
+ 40                                          ;                                    : : : : +------ Over flow                 
+ 41                                     ;                                    : : : +-------- Zero                      
+ 42                                     ;                                    : : +---------- Negative                  
+ 43                                     ;                                    : +------------ Interrupt                 
+ 44                                     ;                                    +-------------- Half carry      
+ 45                                     ;   
+ 46                                     ;-------------------------------------------------------------------------------
+ 47                                     ;
+ 48                                     #include "osvars.inc"
+#1                                      /******************************************************************************/
+#2                                      /*								    	      */
+#3                                      /*    written on..........28/OCT/85					      */
+#4                                      /*    written by..........BILL					  	      */
+#5                                      /*    version no..........1.0						      */
+#6                                      /*									      */
+#7                                      /*    Contains the MKII operating system variables.			      */
+#8                                      /******************************************************************************/
+#9                                      
+ONEWCRC.ASM                            XA6301 ASSEMBLER V3.1                             05/JAN/2025 19:20:30  PAGE:    2
+
+#10                                     	.list
+ 54                                     #include "swi.inc"
+#1                                      /******************************************************************************/
+#2                                      /*								    	      */
+#3                                         /*    written on..........28/OCT/85					      */
+#4                                      /*    written by..........BILL					  	      */
+#5                                      /*    version no..........1.0						      */
+#6                                      /*									      */
+#7                                      /*    Contains the MK2 SWI's.						      */
+#8                                      /******************************************************************************/
+#9                                      	.list
+ 56                                     
+ 57    0000 ->00000000                  	.org 000
+ 58                                     	.radix 10
+ 59                                     
+ 60                                     ; Provide with a string pointer in the D register
+ 61                                     ; A String is length byte followed by string content e.g. STRcrc = 0x07 0x10 0x50 0xA9 0x0A 0x02 0x08 0x00
+ 62                                     ; The CRC should return 0x37 (55 d) 
+ 63                                     ; Note: The input string is not null terminated
+ 64                                     ; 
+ 65    0000                             start:
+ 66                                     
+ 67    0000 18                                  xgdx                ; Move D to X - On entry, D contained the string location	
+ 68    0001 A6 00                               lda     a,^x00,x    ; Load (length byte) into A
+ 69    0003 5F                                  clr     b           ; clear the b register for the (crc) value
+ 70                                     
+ 71    0004                             loop:
+ 72    0004 36                                  psh     a           ; +S1 - Save (length byte) on stack 
+ 73    0005 08                                  inx                 ; Make X Point to the next character in the string
+ 74    0006 A6 00                               lda     a,^x00,x    ; Load (character byte) into A
+ 75    0008 36                                  psh     a           ; +S2 - Save (original character) byte on stack 
+ 76                                         
+ 77    0009 86 08                               lda     a,#^x08     ; Set loop counter for 8 bits in a register
+ 78                                     
+ 79    000B                             bitloop:
+ 80    000B 36                                  psh     a           ; +S3 - Save (bit counter) in a on stack 
+ 81                                     
+ 82                                             ; Perform the CRC calculation on the byte in b
+ 83    000C 17                                  tba                 ; transfer a copy of the (crc) to the a register
+ 84    000D 54                                  lsr     b           ; Shift right the (crc) byte i.e. crc = crc / 2
+ 85    000E A8 00                               eor     a,^x00,x    ; Exclusive-Or a register current (crc) with buffer character pointed to by x
+ 86    0010 85 01                               bit     a,#^x01     ; was the lsb set of the previous XOR operation
+ 87    0012 27 00-                              beq     no_xor      ; if bit was not set then don't do an Exclusive Or
+ 88    0014 C8 8C                               eor     b,#^x8C     ; XOR b register (crc) with the polynomial
+ 89                                     
+ 90    0016                             no_xor:
+ 91    0016 64 00                               lsr     ^x00,x      ; Shift right the input character right (directly in the source string)
+ 92    0018 32                                  pul     a           ; -S3 - restore the (bit counter) from the stack
+ 93    0019 4A                                  dec     a           ; Decrement bit loop counter
+ 94    001A 26 EF                               bne     bitloop     ; Repeat until all 8 bits are processed i.e. (bit counter) a = 0
+ 95                                     
+ 96                                             ; Processing of the byte completed  
+ 97    001C 32                                  pul     a           ; -S2 - Get (original character) from stack 
+ 98    001D A7 00                               sta     a,^x00,x    ; Restore the input strings orginal character
+ 99                                         
+ 100   001F 32                                  pul     a           ; -S1 - Restore (length byte) from stack
+ 101   0020 4A                                  dec     a           ; Decrement byte length counter, leaving it in register a
+ONEWCRC.ASM                            XA6301 ASSEMBLER V3.1                                                             05/JAN/2025 19:20:30  PAGE:    3
+
+ 102   0021 26 E1                               bne     loop        ; Repeat until all characters are processed i.e. (byte counter) a = 0
+ 103                                    
+ 104                                            ; At this point a (length byte) should be zero and (current crc) is in b (a and b form the D register)
+ 105   0023                             done:
+ 106   0023 18                                              xgdx		    ; swap the D and X register to return the result in the X register to OPL
+ 107   0024 39                                  rts
+ 108                                    
+ 109                                    .end
+
+                WARNINGS  = 0
+                ERRORS    = 0
+                PACK SIZE = 37

@@ -1,0 +1,57 @@
+TSON01.ASM                             XA6301 ASSEMBLER V3.1                             05/JAN/2025 19:20:57  PAGE:    1
+
+ 1                                      /****************************************************************/
+ 2                                      /*								*/
+ 3                                      /*	Top Slot ON						*/
+ 4                                      /*	(c) NotForPurpose					*/
+ 5                                      /*								*/
+ 6                                      /*								*/
+ 7                                      /*		Rev 0.10	22/12/2024			*/
+ 8                                      /*								*/
+ 9                                      /****************************************************************/
+ 10                                     ;
+ 11                                     #include "osvars.inc"
+#1                                      /******************************************************************************/
+#2                                      /*								    	      */
+#3                                      /*    written on..........28/OCT/85					      */
+#4                                      /*    written by..........BILL					  	      */
+#5                                      /*    version no..........1.0						      */
+#6                                      /*									      */
+#7                                      /*    Contains the MKII operating system variables.			      */
+#8                                      /******************************************************************************/
+#9                                      
+#10                                     	.list
+ 17                                     #include "swi.inc"
+#1                                      /******************************************************************************/
+#2                                      /*								    	      */
+#3                                      /*    written on..........28/OCT/85					      */
+#4                                      /*    written by..........BILL					  	      */
+#5                                      /*    version no..........1.0						      */
+#6                                      /*									      */
+#7                                      /*    Contains the MK2 SWI's.						      */
+#8                                      /******************************************************************************/
+#9                                      	.list
+ 19                                     
+ 20    0000 ->00000000                  	.org 000
+ 21                                     	.radix 10
+ 22                                     ;
+ 23                                     ;
+ 24    0000                             start:
+ 25    0000 C6 03                       	lda	b,#^x03		; Pack 3
+ 26                                     	os	PK$SETP		; Select the pack
+ <1    0002 3F 62                       	.byte	^X3F,PK$SETP
+ <2                                     .endm
+ 27    0004 CE 20C1                     	ldx	#kbb_pkof	; Load x register with address
+ 28    0007 86 00                       	lda	a,#^x00		; Load a with mode i.e. always on
+ 29    0009 A7 00                       	sta	a,0,x		; Write pack always on
+ 30                                     		
+ 31                                     ;
+ 32                                     ;	Top slot is now activated
+ 33                                     ;       Note its left on on purpose
+ 34    000B 39                          	rts		; return to OPL
+ 35                                     ;
+ 36                                       .end
+
+                WARNINGS  = 0
+                ERRORS    = 0
+                PACK SIZE = 12

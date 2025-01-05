@@ -1,0 +1,82 @@
+IOB1WSET.ASM                           XA6301 ASSEMBLER V3.1                             05/JAN/2025 19:20:25  PAGE:    1
+
+ 1                                      /****************************************************************/
+ 2                                      /*								*/
+ 3                                      /*	Top Slot State Set						*/
+ 4                                      /*	(c) NotForPurpose					*/
+ 5                                      /*								*/
+ 6                                      /*								*/
+ 7                                      /*		Rev 0.10	22/12/2024			*/
+ 8                                      /*								*/
+ 9                                      /****************************************************************/
+ 10                                     ;
+ 11                                     ;---------------------------------------
+ 12                                     ;		
+ 13                                     ; See 	https://www.jaapsch.net/psion/tech04.htm#p4.2
+ 14                                     ;     	DATA BUS (PROCESSOR PORT 2)
+ 15                                     ;     	https://www.jaapsch.net/psion/tech04.htm#p4.5
+ 16                                     ;     	CONTROL LINES (PROCESSOR PORT 6)
+ 17                                     ;
+ 18                                     ; PORT 2 DDR address 0x0001
+ 19                                     ; PORT 2 State address 0x0003
+ 20                                     ;
+ 21                                     ; PORT 2
+ 22                                     ; *3  D3 - I/P - 8  - 0x08
+ 23                                     ;  4  D2 - I/P - 4  - 0x04
+ 24                                     ;  5  D0 - O/P - 1  - 0x01
+ 25                                     ; *6  D4 - O/P - 16 - 0x10
+ 26                                     ;---------------------------------------
+ 27                                     ;
+ 28                                     ; Note the original macro assembler is broken for oim and aim hence .byte
+ 29                                     ;
+ 30                                     ;
+ 31                                     ; Following slot activation via PK$SETP Slot has +5V for 50 ms
+ 32                                     ; Set bits SS-0x40, SOE-0x08 etc via OIM ak;a OR Immediate
+ 33                                     ; via AND Immediate set SS-Low
+ 34                                     ; CE-HW Active Low = VCC=1 + SS-L=0 + SOE=1
+ 35                                     ;
+ 36                                     #include "osvars.inc"
+#1                                      /******************************************************************************/
+#2                                      /*								    	      */
+#3                                      /*    written on..........28/OCT/85					      */
+#4                                      /*    written by..........BILL					  	      */
+#5                                      /*    version no..........1.0						      */
+#6                                      /*									      */
+#7                                      /*    Contains the MKII operating system variables.			      */
+#8                                      /******************************************************************************/
+#9                                      
+#10                                     	.list
+ 42                                     #include "swi.inc"
+#1                                      /******************************************************************************/
+#2                                       /*								    	      */
+#3                                      /*    written on..........28/OCT/85					      */
+#4                                      /*    written by..........BILL					  	      */
+#5                                      /*    version no..........1.0						      */
+#6                                      /*									      */
+#7                                      /*    Contains the MK2 SWI's.						      */
+#8                                      /******************************************************************************/
+#9                                      	.list
+ 44                                     
+IOB1WSET.ASM                           XA6301 ASSEMBLER V3.1                             05/JAN/2025 19:20:25  PAGE:    2
+
+ 45    0000 ->00000000                  	.org 000
+ 46                                     	.radix 10
+ 47                                     ;
+ 48                                     ;
+ 49    0000                             start:
+ 50    0000 72 40 17                    	oim	#^x40, POB_PORT6:
+ 51    0003 72 08 17                    	oim	#^x08, POB_PORT6:
+ 52    0006 71 BF 17                    	aim	#^xBF, POB_PORT6:
+ 53                                     
+ 54    0009 72 03 01                    	oim	#^x03, POB_DDR2:	 ; DDR - Set Input / Output direction PORT 2 DDR
+ 55    000C 72 11 03                    	oim	#^x11, POB_PORT2:	 ; Set PORT 2 bit D0 and D4 High
+ 56                                     
+ 57                                     ; Note we leave the TOP slot powered to continuously power the 1-Wire system	
+ 58                                     
+ 59    000F 39                          	rts		; return to OPL
+ 60                                     ;
+ 61                                     .end
+
+                WARNINGS  = 0
+                ERRORS    = 0
+                PACK SIZE = 16
