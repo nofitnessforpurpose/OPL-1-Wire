@@ -1,5 +1,5 @@
 # OPL 1-Wire
-Organiser II <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> code for Top Slot Retro I/O interface or compatible 5 volt COMMS interface to top slot.
+Organiser II <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> code for Top Slot Retro I/O interface or compatible 5 volt interface to Top Slot (e.g. internal COMMS adaptor signals).
 
 <div align="center">
   <div style="display: flex; align-items: flex-start;">
@@ -16,7 +16,7 @@ Organiser II <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> code fo
 <br>  
 
 ## Use Case
-1-Wire is ideally suited to the Organiser II device as it is a low power half duplex system, designed to support a large number of low power devices. Devices, e.g. Temperature sensors, clocks, authenticators, memory, a/d convertors etc. on a 1-Wire network are connected in parallel and can be addressed simultaneously or individually depending on the applicable mode.
+1-Wire is ideally suited to the Organiser II device as it is a low power half duplex system, designed to support a large number of low power devices. Devices, e.g. Temperature sensors, clocks, authenticators, memory, a/d convertors <a href="https://github.com/nofitnessforpurpose/OPL-1-Wire/blob/main/images/1W-DC-AMPS.jpg">etc.</a> on a 1-Wire network are connected in parallel and can be addressed simultaneously or individually depending on the applicable mode.
 
 This <a href="https://en.wikipedia.org/wiki/Psion Organiser">Psion Organiser II</a> <a href="https://en.wikipedia.org/wiki/Open_Programming_Language">OPL program</a> uses the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIOBasic">Top Slot Retro IO Basic</a> interface (or compatible COMMS, 5 volt signals) to access <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> devices. Examples demonstrate accessing a 1-Wire DS18B20 temperature sensor, though any 1-Wire device can be accessed via the interface and supporting protocol.
 
@@ -47,7 +47,7 @@ Connection to the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIO
 
 
 ### Summary
-A standard DS18B20 1-Wire device is connected:  
+A standard 1-Wire device (such as th DS18B20) is connected:  
 
 | Pin |  TSRIOB Pin | 1-Wire Function |
 | --- | - | - |
@@ -55,7 +55,29 @@ A standard DS18B20 1-Wire device is connected:
 |  2  | Pin 3 - D3 | DQ line|
 |  3  | Pin 5 - D0 | Vdd (+ 5 volt power)|
 
+### Signals
+1-wire signals are typically 0 to 5 volt (3 Volt devices are becoming available) having signals as shown below:
+<div align="center">
+  <div style="display: flex; align-items: flex-start;">
+  <img src="https://github.com/nofitnessforpurpose/OPL-1-Wire/blob/main/images/1-Wire%20Waveform%20Graphic.jpg?raw=true" width="400px" alt="NotFitForPurpose DS18B20 signals. Image copyright (c) 21 December 2024 nofitnessforpurpose All Rights Reserved">
+  </div>
+</div>
+<BR>
+The Controller (in this case the Organiser II) signals are shown in yellow / gold. The target device signals e.g. a DS18B20 temperature sensor, i-button etc are shown in dark green.  
 
+Periods (in uS) are (approximate):
+|  Label | Period |
+| ------ | ------ |
+|   A    |   15   |
+|   B    |   45   |
+|   C    |   60   |
+|   D    |    5   |
+|   E    |   15   |
+|   F    |   40   |
+|   G    |    5   |
+|   H    |  480   |
+|   I    |   15   |
+|   J    |   15   |
 
 <BR>
 
