@@ -44,6 +44,7 @@ Devices such as the ATTiny85, PIC family, CH32V003 or other microcontrollers can
   | RD1WSPD$ | None | String |Reads the device scratch pad |
   | POF | None | None |Turns off the Top Slot |
 
+The demo code DS18B20 is intended to be simple rather than efficient in its use of resource e.g. memory or processing. The machine code routines are for example re-built on every call, adding considerably to overhead in the demo routine. Pre-building the machine code would speed the data acquisition which would reduce power consumption.  
   <BR>
 
 ### Connection
