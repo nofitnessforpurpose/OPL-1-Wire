@@ -45,13 +45,16 @@
 ;   
 ;-------------------------------------------------------------------------------
 ;
-#include "osvars.inc"
-#include "oseror.inc"
-#include "oshead.inc"			
-#include "swi.inc"
+#include "osvars.inc"		; Contains the MKII operating system variables.
+#include "oseror.inc"		; Contains all the operating system errors.
+#include "oshead.inc"		; Contains constants and macros for the MKII operating system.
+#include "swi.inc"		; Contains the MK2 SWI's. (Software Interrupt Vectors)
 
-	.org 000
-	.radix 10
+; Default config options
+;
+	.org 000		; Sets address assembly will start (or continue)
+	.radix 10		; Sets the default base used by the assembler
+;
 
 ; Provide with a string pointer in the D register
 ; A String is length byte followed by string content e.g. STRcrc = 0x07 0x10 0x50 0xA9 0x0A 0x02 0x08 0x00
