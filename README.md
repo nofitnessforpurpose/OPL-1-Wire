@@ -80,7 +80,7 @@ A standard 1-Wire device (such as th DS18B20) is connected:
   </div>
 </div>
 <BR>
-The Controller (in this case the Organiser II) signals are shown in yellow / gold. The target device signals e.g. a DS18B20 temperature sensor, i-button etc are shown in dark green.  
+The Controller (in this case the Organiser II) signals are shown in yellow / gold. The target device signals e.g. a DS18B20 temperature sensor, i-button etc. are shown in dark green. It Will be seen from the signal traces that the controller initiates all transaction over the 1-Wire network.   
 
 Periods (in uS) are (approximate):
 |  Label | Period |
