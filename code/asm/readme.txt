@@ -17,5 +17,6 @@ The following include files are typically required:
   swi.inc
 
 The file assemble.bat would assemble all the files with the correct command line parameters.
-The assembled code is typically extracted and placed into an OPL procedure that acts to call the machine code.
+The assembled code is typically extracted from the S-File and placed into an OPL procedure
+that acts to call the machine code via the CONV$: procedure.
 The machine code is held in the procedure as a hexadecimal string.
