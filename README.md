@@ -33,8 +33,21 @@ Devices such as the ATTiny85, PIC family, CH32V003 or other microcontrollers can
 </div>
 <BR>
 
-## Connection
-Connection to the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIOBasic"> Top Slot Retro IO Basic</a> requires a diode and resistor. A diode is connected between pin 3 ( D3 ){Andode} and pin 6 ( D4 )  {Cathode}.  A 4k7 resistor is connecteb between Pin 3 ( D3 ) and Pin 5 ( D0). Pin 4 ( D2 ) is not used and should be pulled low to ground.
+## Demo Code
+<a href="https://github.com/nofitnessforpurpose/OPL-1-Wire/blob/main/code/DS18B20.OPL">DS18B20.OPL</a> is demonstration code that uses the features made available by the basic supporting procedures. In order of typical use they are:
+  | Routine | Parameter | Returns | Comment |
+  | ------- | --------- | ------- | ------- |       
+  | PON:    | None | None | Power on the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIOBasic"> Top Slot Retro IO Basic</a> |
+  | IOB1WSET: | None | None | Set Top Slot Retro IO Basic interface to correct state for subsequent 1-wire transactions |
+  | ONEWRST: | None | Byte | Reset the one wire interface and return the detected status |
+  | SND1WBYT: | Byte | None |Send a single byte e.g. a ROM command | 
+  | RD1WSPD$ | None | String |Reads the device scratch pad |
+  | POF | None | None |Turns off the Top Slot |
+
+  <BR>
+
+### Connection
+Connection to the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIOBasic"> Top Slot Retro IO Basic</a> requires a diode and resistor. A diode is connected between pin 3 ( D3 ){Andode} and pin 6 ( D4 )  {Cathode}.  A 4k7 resistor is connected between Pin 3 ( D3 ) and Pin 5 ( D0). Pin 4 ( D2 ) is not used and should be pulled low to ground.
 
 | Pin | Function | Circuit & Comment | 1-Wire Function |
 | --- | - | - | - |
@@ -45,6 +58,7 @@ Connection to the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIO
 |  5  | D0 | +5 Volt 30 mA 1-Wire power (for non parasitic devices) & Pull up resistor | Vdd (Power) |
 |  6  | D4 | Diode Cathode, 1-Wire current sink for DQ, connect to 1-Wire DQ via Diode Anode | |
 
+<BR>
 
 ### Summary
 A standard 1-Wire device (such as th DS18B20) is connected:  
@@ -54,6 +68,8 @@ A standard 1-Wire device (such as th DS18B20) is connected:
 |  1  | Pin 2 - 0 V | Ground reference|
 |  2  | Pin 3 - D3 | DQ line|
 |  3  | Pin 5 - D0 | Vdd (+ 5 volt power)|
+
+<BR>
 
 ### Signals
 1-wire signals are typically 0 to 5 volt (3 Volt devices are becoming available) having signals as shown below:
