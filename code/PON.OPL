@@ -1,11 +1,11 @@
 PON:
-GLOBAL PW$(20)
+GLOBAL PW$(24)
 REM Turn on Top Slot and keep slots powered
 
 REM (c) Copyright 2024 nofitnessforpurpose All Rights Reserved
-REM Revision : 0.11
+REM Revision : 0.12
 REM Author   : NotFitForPurpose
-REM Date     : 21 Dec 2024
+REM Date     : 11 Jan 2025
 REM Hardware : Top Slot Retro IO Basic
 
 REM See TSON01.ASM
