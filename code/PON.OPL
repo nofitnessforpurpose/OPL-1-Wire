@@ -1,5 +1,5 @@
 PON:
-GLOBAL PW$(24)
+LOCAL PW$(12)
 REM Turn on Top Slot and keep slots powered
 
 REM (c) Copyright 2024 nofitnessforpurpose All Rights Reserved
