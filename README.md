@@ -38,10 +38,11 @@ Devices such as the ATTiny85, PIC family, CH32V003 or other microcontrollers can
   | Routine | Parameter | Returns | Comment |
   | ------- | --------- | ------- | ------- |       
   | PON:    | None | None | Power on the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIOBasic"> Top Slot Retro IO Basic</a> |
-  | IOB1WSET: | None | None | Set Top Slot Retro IO Basic interface to correct state for subsequent 1-wire transactions |
+  | IOB1WSET: | None | None | Set Top Slot Retro IO Basic interface to correct state for subsequent 1-Wire transactions |
   | ONEWRST: | None | Byte | Reset the 1-Wire interface and return the detected status |
-  | SND1WBYT: | Byte | None |Send a single byte e.g. a ROM command | 
-  | RD1WSPD$ | None | String |Reads the device scratch pad |
+  | SND1WBYT: | Byte | None | Send a single byte e.g. a ROM command | 
+  | RD1WSPD$ | String | String | Reads the device scratch pad |
+  | ONEWCRC  | Float | String | Calculate CRC of data |
   | POF | None | None |Turns off the Top Slot |
 
 The demo code DS18B20 is intended to be simple rather than efficient in its use of resource e.g. memory or processing. The machine code routines are for example re-built on every call, adding considerably to overhead in the demo routine. Pre-building the machine code would speed the data acquisition which would reduce power consumption.  
