@@ -2,10 +2,10 @@ SND1WBYT:(BYTE%)
 REM Send the supplied byte on the opened 1-Wire bus
 REM Pre-Selected Top Slot e.g. PON - IOB1WSET
 
-REM (c) Copyright 2024 nofitnessforpurpose All Rights Reserved
-REM Revision : 0.2
+REM (c) Copyright 2024, 2025 nofitnessforpurpose All Rights Reserved
+REM Revision : 0.3
 REM Modified : NotFitForPurpose
-REM Date     : 31 Dec 2024
+REM Date     : 12 Jan 2025
 REM Hardware : Top Slot Retro IO Basic
 
 REM See SNDBYT.ASM
@@ -13,5 +13,5 @@ REM See SNDBYT.ASM
 LOCAL A%
 LOCAL M$(64)
 
-M$ = CONV$:("CE000909272BC5012602201586EF970386064A26FD86FF9703860B4A26FD5620E286EF9703861C4A26FD86FF97035620D239")
+M$ = CONV$:("CE000909272BC5012602201586EF970386014A26FD86FF9703860B4A26FD5620E286EF9703861C4A26FD86FF97035620D239")
 A% = USR(ADDR(M$) + 1, BYTE%)
