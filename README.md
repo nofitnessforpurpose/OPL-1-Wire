@@ -39,7 +39,7 @@ Devices such as the ATTiny85, PIC family, CH32V003 or other microcontrollers can
   | ------- | --------- | ------- | ------- |       
   | PON:    | None | None | Power on the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIOBasic"> Top Slot Retro IO Basic</a> |
   | IOB1WSET: | None | None | Set Top Slot Retro IO Basic interface to correct state for subsequent 1-wire transactions |
-  | ONEWRST: | None | Byte | Reset the one wire interface and return the detected status |
+  | ONEWRST: | None | Byte | Reset the 1-Wire interface and return the detected status |
   | SND1WBYT: | Byte | None |Send a single byte e.g. a ROM command | 
   | RD1WSPD$ | None | String |Reads the device scratch pad |
   | POF | None | None |Turns off the Top Slot |
