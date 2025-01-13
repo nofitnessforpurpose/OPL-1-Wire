@@ -1,0 +1,45 @@
+bs2byt$:(ip$)
+REM Convert 1-Wire bit stream (72 byte string) to byte values
+REM Return a string comprising byte values e.g. Scratch pad bytes
+
+REM (c) Copyright 2025 nofitnessforpurpose All Rights Reserved
+REM Revision : 0.1
+REM Modified : NotFitForPurpose
+REM Date     : 12 Jan 2025
+REM Hardware : Top Slot Retro IO Basic
+
+REM An OPL string is structured, length byte then string values
+REM
+REM xx xx xx xx .. .. nn
+REM  :  :  : 
+REM  :  :  +-------------- First bit value 251 = a 1 set
+REM  :  +----------------- Number of bits to receive  
+REM  +-------------------- Length byte of string
+REM
+REM The first bit value is therefore at MID$(ip$, 2, 1)
+
+LOCAL a% : REM Calculated character byte value
+LOCAL i% : REM Bit conversion multiplier
+LOCAL j% : REM Machine code byte counter
+
+LOCAL bf$(20) : REM Resultant byte string from converted bit stream
+
+j%=2 : REM Set start position in input string ip$
+DO
+  a%=0
+  i%=1 : REM Initialise bit conversion multiplier
+  REM Decode 8 bits into 1 byte
+  DO
+    IF (ASC(MID$(ip$, j%, 1)) = 251) : REM value of a 1 bit set in bit stream from hardware
+      a% = a% + i% : REM Accunulate byte value for this bit position
+    ENDIF
+    i% = i% * 2 : REM Increment bit conversion multiplier
+    j% = j% + 1 : REM Increment string position counter
+  UNTIL (i% > 128)
+  REM PRINT "CB ", a%
+  REM Assign decoded byte value to the returned string
+  bf$ = bf$ + CHR$(a%)
+UNTIL (j% > 72)
+
+REM return the converted byte string e.g. Scratch Pad
+return bf$

@@ -1,51 +1,33 @@
-rd1wspd$:
+RD1WSPD$:
 REM Read 1-Wire scratch pad from the pre selected device
 REM Pre-Selected Top Slot e.g. PON - IOB1WSET
-REM Returns read bytes - typically the scratchpad registers
 
-REM (c) Copyright 2024 nofitnessforpurpose All Rights Reserved
-REM Revision : 0.1
+REM (c) Copyright 2024, 2025 nofitnessforpurpose All Rights Reserved
+REM Revision : 0.2
 REM Modified : NotFitForPurpose
-REM Date     : 30 Nov 2024
+REM Date     : 12 Jan 2025
 REM Hardware : Top Slot Retro IO Basic
 
 REM See RECBYTS.ASM
 
-LOCAL a%, i%, j%
-LOCAL b$(128) : REM Bit stream
-LOCAL m$(64) : REM  Machine code
-LOCAL bf$(20) : REM Converted bit stream
+LOCAL A%,I%,J%
+LOCAL B$(128) : REM Bit stream
+LOCAL M$(64) : REM  Machine code
+LOCAL BF$(20) : REM Converted bit stream
 
-m$=CONV$:("183CE601085A27272002010186EF970386014A26FD86FF970301010101019603010101010101A70186064A26FD20D53839")
-
+M$=CONV$:("183CE601085A27272002010186EF970386014A26FD86FF970301010101019603010101010101A70186064A26FD20D53839")
 
 REM Create a prefilled string for the routine to use
 REM The first byte of the supplied string is set to the number of bytes to be received
-b$ = CHR$(72 + 1) + REPT$("-", 74)
+B$ = CHR$(72 + 1) + REPT$("-", 74)
 
 REM Call the Receive bytes code with the address of the string to hold the received bits
-b$ = USR$(ADDR(m$) + 1, ADDR(b$))
-
+B$ = USR$(ADDR(M$) + 1, ADDR(B$))
 
 REM We now have a bit stream in the returned string
 REM Convert the bit stream to byte values
 REM This will be implemented in machine code in a later release
-j%=2
-DO
-  a%=0
-  i%=1
-  REM Decode 8 bits into 1 byte
-  DO
-    IF (ASC(MID$(b$, j%, 1)) = 251)
-      a% = a% + i%
-    ENDIF
-    i% = i% * 2 : REM Increment
-    j% = j% + 1
-  UNTIL (i% > 128)
-  REM PRINT "CB ", a%
-  REM Assign the decoded byte to the returned string
-  bf$ = bf$ + CHR$(a%)
-UNTIL (j% > 72)
+BF$=BS2BYT$:(B$)
 
 REM Note the precise decoding will depend on the mode of the target device
 REM This will have been set prior to calling a Read Scratch Pad

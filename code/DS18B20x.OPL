@@ -1,0 +1,72 @@
+DS18B20X:
+REM Combined 1-Wire Demo For Single 1-Wire DS18B20 device
+
+REM (c) Copyright 2025 nofitnessforpurpose All Rights Reserved
+REM Revision : 0.1
+REM Modified : NotFitForPurpose
+REM Date     : 12 Jan 2025
+REM Hardware : Top Slot Retro IO Basic
+
+REM Needs the following external procedures
+REM String=BS2BYT$(String), String=CONV$:(String), Float=DS18B20T:(String)
+
+LOCAL a%       : REM Machine code parameter
+LOCAL b$(78)   : REM Buffer string
+LOCAL d$(16)   : REM Converted Scratchpad Value
+LOCAL bs$(128) : REM Byte String
+
+LOCAL mPN$(12) : REM PON
+LOCAL mPO$(20) : REM POF
+LOCAL mIO$(16) : REM IOB1WSET
+LOCAL mCR$(38) : REM ONEWCRC
+LOCAL mRS$(30) : REM ONEWRST
+LOCAL mRD$(50) : REM RD1WSPD$
+LOCAL mSB$(50) : REM SND1WBYT
+
+PRINT "DS18B20x"
+PRINT "Preparing Code"
+
+d$= REPT$("-", 16)
+
+mPN$=CONV$:("C6033F62FE20C18600A70039") : REM PON
+mPF$=CONV$:("8600970371FC01C6033F5BCE20C18601A70039") : REM POF
+mIO$=CONV$:("72401772081771BF1772030172110339") : REM OIB1WSET
+mCR$=CONV$:("18A6005F3608A600368608361754A80085012702C88C6400324A26EF32A700324A26E11839") : REM Integer=ONEWCRC:(String)
+mRS$=CONV$:("71EF03866B4A26FD721003861A4A26FDD603C40837866F4A26FD331839") : REM ONEWRST
+mRD$=CONV$:("183CE601085A27272002010186EF970386014A26FD86FF970301010101019603010101010101A70186064A26FD20D53839") : REM String=RD1WSPD$:(String)
+mSB$=CONV$:("CE000909272BC5012602201586EF970386014A26FD86FF9703860B4A26FD5620E286EF9703861C4A26FD86FF97035620D239") : REM SND1WBYT:(Integer)
+REM All machine code is now available to be used
+
+AT 1,2
+PRINT "Reading         "  
+REM No other drive access until call to mPO$
+a%=USR(ADDR(mPN$)+1,0) : REM Top Slot On
+a%=USR(ADDR(mIO$)+1,0) : REM I/O State Set
+
+REM Reset All Devices - For Conversion
+a%=USR(ADDR(mRS$)+1,0)
+a%=USR(ADDR(mSB$)+1,$CC) : REM Skip ROM
+a%=USR(ADDR(mSB$)+1,$44) : REM All Devices Convert
+PAUSE 12 : REM Conversion Delay
+
+REM Reset All Devices - For Scratch Pad Read
+a%=USR(ADDR(mRS$)+1,0)
+a%=USR(ADDR(mSB$)+1,$CC) : REM Skip ROM
+a%=USR(ADDR(mSB$)+1,$BE) : REM Read Scratch Pad
+b$=CHR$(72+1) + REPT$("-", 74)
+b$=USR$(ADDR(mRD$)+1,ADDR(b$))
+
+a%=USR(ADDR(mPF$)+1,0) : REM Top Slot Off
+REM Other drive access now OK
+
+d$=BS2BYT$:(b$) : REM Byte stream to Byte String
+a%=USR(ADDR(mCR$)+1,ADDR(d$)) : REM CRC State - 0 = Good
+AT 1,2
+PRINT "                "  
+AT 1,2
+IF (a%=0)
+  PRINT FIX$(DS18B20T:(d$),2,5),"C"
+ELSE
+  PRINT "CRC Error"
+ENDIF
+PAUSE 50
