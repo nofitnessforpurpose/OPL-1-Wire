@@ -108,7 +108,7 @@ Only the OPL files are required along with the interface, the assembly files are
 Copy the OPL files to the A: drive and run DS18B20 when a 1-Wire temperature sensor is connected as described above.  
 
 The ROM Search utility has not been implemented at this time, there are two options:
-  1) For multi device networs, address devices directly using a devices known address via the MATCH ROM command 
+  1) For multi device Micro Lans, address devices directly using a devices known address via the MATCH ROM command 
   2) Use only a single device
      
 <BR>
