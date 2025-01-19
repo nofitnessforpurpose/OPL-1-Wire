@@ -56,7 +56,7 @@ Connection to the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIO
 |  1  |  +5 V | No connection (+5 Volt Orgnaiser internal power) | |
 |  2  |  0 V | 0 V | 0 Volt ground reference | GND |
 |  3  | D3 |  Diode Anode & Pull Up resistor | 1-Wire Data Line | DQ |
-|  4  | D2 | Connect to ground refernce | |
+|  4  | D2 | Connect to ground reference | |
 |  5  | D0 | +5 Volt 30 mA 1-Wire power (for non parasitic devices) & Pull up resistor | Vdd (Power) |
 |  6  | D4 | Diode Cathode, 1-Wire current sink for DQ, connect to 1-Wire DQ via Diode Anode | |
 
@@ -117,7 +117,7 @@ The ROM Search utility has not been implemented at this time, there are two opti
 The current iteration supports 1-Wire standard mode only.
 
 Where no Top Slot ROM is used for the 1-Wire code base, code accessing the Top Slot must reside on the internal A: storage location.
-As power and data for the 1-Wire network is sourced from the Top-Slot and uses the internal data bus, a 1-Wire transaction sequence must complete before accessing B: or C: storage locations. i.e. Calling POF:, or equivalent  to terminate Top Slot use.    
+As power and data for the 1-Wire network is sourced from the Top-Slot and uses the internal data bus, a 1-Wire transaction sequence must complete before accessing B: or C: storage locations. i.e. Calling POF:, or equivalent to terminate Top Slot use.    
 
 <BR>
 
