@@ -2,9 +2,9 @@ DS18B20X:
 REM Combined 1-Wire Demo For Single 1-Wire DS18B20 device
 
 REM (c) Copyright 2025 nofitnessforpurpose All Rights Reserved
-REM Revision : 0.1
+REM Revision : 0.11
 REM Modified : NotFitForPurpose
-REM Date     : 12 Jan 2025
+REM Date     : 19 Jan 2025
 REM Hardware : Top Slot Retro IO Basic
 
 REM Needs the following external procedures
@@ -39,12 +39,19 @@ REM All machine code is now available to be used
 
 AT 1,2
 PRINT "Reading         "  
-REM No other drive access until call to mPO$
+REM No other drive access until call to mPF$
 a%=USR(ADDR(mPN$)+1,0) : REM Top Slot On
 a%=USR(ADDR(mIO$)+1,0) : REM I/O State Set
 
 REM Reset All Devices - For Conversion
 a%=USR(ADDR(mRS$)+1,0)
+AT 1,2
+PRINT "State",a%
+IF (a%=8) 
+  AT 1,2
+  VIEW(2,"1-Wire not found")
+  STOP
+ENDIF
 a%=USR(ADDR(mSB$)+1,$CC) : REM Skip ROM
 a%=USR(ADDR(mSB$)+1,$44) : REM All Devices Convert
 PAUSE 12 : REM Conversion Delay
