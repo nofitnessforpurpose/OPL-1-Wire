@@ -25,7 +25,6 @@
 ; *6  D4 - O/P - 16 - 0x10
 ;---------------------------------------
 ;
-; Note the original macro assembler is broken for oim and aim hence .byte
 ;
 ;
 ; Following slot activation via PK$SETP Slot has +5V for 50 ms
