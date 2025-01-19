@@ -45,7 +45,7 @@ Devices such as the ATTiny85, PIC family, CH32V003 or other microcontrollers can
   | ONEWCRC:  | String | Float | Calculate CRC of data in String |
   | POF: | None | None |Turns off the Top Slot |
 
-The demo code DS18B20 is intended to be simple rather than efficient in its use of resource e.g. memory or processing. The machine code routines are for example re-built on every call, adding considerably to overhead in the demo routine. Pre-building the machine code would speed the data acquisition which would reduce power consumption. DS18B20x: (to be released) implements such a scheme minimising Top Slot on period.  
+The demo code DS18B20 is intended to be simple rather than efficient in its use of resource e.g. memory or processing. The machine code routines are for example re-built on every call, adding considerably to overhead in the demo routine. Pre-building the machine code would speed the data acquisition also reducing power consumption. DS18B20x: implements such a scheme minimising Top Slot on period.  
   <BR>
 
 ### Connection
