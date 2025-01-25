@@ -24,7 +24,7 @@ The Organiser II is also able to emulate a 1-Wire device via additional software
 
 For a full list of 1-Wire capable devices, see the <a href="https://www.analog.com/en/product-category/1wire-devices.html">manufacturers</a> site.  
 
-Devices such as the ATTiny85, PIC family, CH32V003 or other microcontrollers can be configured with software to act as 1-Wire devices for additional sensors (Seperate power may be required).  
+Devices such as the ATTiny85, PIC family, CH32V003 or other microcontrollers can be configured with software to act as 1-Wire devices for additional sensors (Separate power may be required).  
 
 <div align="center">
   <div style="display: flex; align-items: flex-start;">
@@ -49,11 +49,11 @@ The demo code DS18B20 is intended to be simple rather than efficient in its use 
   <BR>
 
 ### Connection
-Connection to the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIOBasic"> Top Slot Retro IO Basic</a> requires a diode and resistor. A diode is connected between pin 3 ( D3 ){Andode} and pin 6 ( D4 )  {Cathode}.  A 4k7 resistor is connected between Pin 3 ( D3 ) and Pin 5 ( D0). Pin 4 ( D2 ) is not used and should be pulled low to ground.
+Connection to the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIOBasic"> Top Slot Retro IO Basic</a> requires a diode and resistor. A diode is connected between pin 3 ( D3 ) {Anode} and pin 6 ( D4 )  {Cathode}.  A 4k7 resistor is connected between Pin 3 ( D3 ) and Pin 5 ( D0). Pin 4 ( D2 ) is not used and should be pulled low to ground.
 
 | Pin | Function | Circuit & Comment | 1-Wire Function |
 | --- | - | - | - |
-|  1  |  +5 V | No connection (+5 Volt Orgnaiser internal power) | |
+|  1  |  +5 V | No connection (+5 Volt Organiser internal power) | |
 |  2  |  0 V | 0 V | 0 Volt ground reference | GND |
 |  3  | D3 |  Diode Anode & Pull Up resistor | 1-Wire Data Line | DQ |
 |  4  | D2 | Connect to ground reference | |
@@ -63,7 +63,7 @@ Connection to the <a href="https://github.com/nofitnessforpurpose/TopSlotRetroIO
 <BR>
 
 ### Summary
-A standard 1-Wire device (such as th DS18B20) is connected:  
+A standard 1-Wire device (such as the DS18B20) is connected:  
 
 | Pin |  TSRIOB Pin | 1-Wire Function |
 | --- | - | - |
