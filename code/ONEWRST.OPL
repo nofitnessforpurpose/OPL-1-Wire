@@ -6,10 +6,10 @@ REM Pre-Selected Top Slot e.g. PON - IOB1WSET
 REM Pulse sequences
 REM Low - 480 uS pulse : Float -  25 uS delay - : Look for Low
 
-REM (c) Copyright 2024 nofitnessforpurpose All Rights Reserved
-REM Revision : 0.1
+REM (c) Copyright 2024, 2025 nofitnessforpurpose All Rights Reserved
+REM Revision : 0.11
 REM Modified : NotFitForPurpose
-REM Date     : 09 Dec 2024
+REM Date     : 25 Jan 2025
 REM Hardware : Top Slot Retro IO Basic
 
 
@@ -30,8 +30,8 @@ REM
 REM 1-Wire power from D0 set High 
 REM Pull line low by setting bit D4=0
 
-REM Pin View DS18B12
-REM   1 2 3
+REM Pin View DS18B20
+REM   1  2  3
 REM  +-------+
 REM  +       +
 REM  + O O O +
@@ -44,7 +44,7 @@ REM  3 Vdd
 
 REM Reserve space for variables
 LOCAL A%
-LOCAL M$(255)
+LOCAL M$(60)
 
 
 M$=CONV$:("71EF03866B4A26FD721003861A4A26FDD603C40837866F4A26FD331839")
