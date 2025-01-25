@@ -1,15 +1,14 @@
 POF:
-GLOBAL PW$(20)
+LOCAL PW$(20)
 REM Turn off Top Slot
 
-REM (c) Copyright 2024 nofitnessforpurpose All Rights Reserved
-REM Revision : 0.11
+REM (c) Copyright 2024, 2025 nofitnessforpurpose All Rights Reserved
+REM Revision : 0.12
 REM Author   : NotFitForPurpose
-REM Date     : 21 Dec 2024
+REM Date     : 25 Jan 2025
 REM Hardware : Top Slot Retro IO Basic
 
 REM See TSOF01.ASM
 
-REM
 PW$=CONV$:("8600970371FC01C6033F5BCE20C18601A70039")
 USR(ADDR(PW$) + 1, 0)
