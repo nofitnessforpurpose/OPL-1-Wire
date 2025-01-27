@@ -2,7 +2,7 @@ onewcrc:(d$)
 REM Calculate 1-Wire CRC from input string
 REM Typically the device scratch pad
 REM Returns the calculated CRC. 
-REM If the CRC value is included 
+REM If the CRC value is included in the input string
 REM the calculation returns 0 on valid data
 
 REM (c) Copyright 2024 nofitnessforpurpose All Rights Reserved
@@ -18,4 +18,4 @@ c$=d$ : REM Copy the supplied string for the machine code routine
 m$=CONV$:("18A6005F3608A600368608361754A80085012702C88C6400324A26EF32A700324A26E11839")
 a%=USR(ADDR(m$) + 1, ADDR(c$))
 
-return a%
+RETURN a%
