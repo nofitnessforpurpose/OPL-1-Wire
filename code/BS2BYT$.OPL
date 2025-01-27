@@ -31,7 +31,7 @@ DO
   REM Decode 8 bits into 1 byte
   DO
     IF (ASC(MID$(ip$, j%, 1)) = 251) : REM value of a 1 bit set in bit stream from hardware
-      a% = a% + i% : REM Accunulate byte value for this bit position
+      a% = a% + i% : REM Accumulate byte value for this bit position
     ENDIF
     i% = i% * 2 : REM Increment bit conversion multiplier
     j% = j% + 1 : REM Increment string position counter
@@ -42,4 +42,4 @@ DO
 UNTIL (j% > 72)
 
 REM return the converted byte string e.g. Scratch Pad
-return bf$
+RETURN bf$
