@@ -3,7 +3,7 @@ Organiser II <a href = "https://en.wikipedia.org/wiki/1-Wire">1-Wire</a> code fo
 
 <div align="center">
   <div style="display: flex; align-items: flex-start;">
-  <img src="https://github.com/nofitnessforpurpose/OPL-1-Wire/blob/main/images/TSRIO-1W-01.png?raw=true" width="400px" alt="NotFitForPurpose Contraption 02. Image copyright (c) 21 December 2024 nofitnessforpurpose All Rights Reserved">
+  <img src="https://github.com/nofitnessforpurpose/OPL-1-Wire/blob/main/images/TSRIO-1W-01.png" width="400px" alt="NotFitForPurpose Contraption 02. Image copyright (c) 21 December 2024 nofitnessforpurpose All Rights Reserved">
   </div>
 </div>
 <BR>
@@ -28,7 +28,7 @@ Devices such as the ATTiny85, PIC family, CH32V003 or other microcontrollers can
 
 <div align="center">
   <div style="display: flex; align-items: flex-start;">
-  <img src="https://github.com/nofitnessforpurpose/OPL-1-Wire/blob/main/images/2025-01-01 22-31-31.gif?raw=true" width="238px" alt="NotFitForPurpose DS18B20. Image copyright (c) 21 December 2024 nofitnessforpurpose All Rights Reserved">
+  <img src="https://github.com/nofitnessforpurpose/OPL-1-Wire/blob/main/images/2025-01-01 22-31-31.gif" width="238px" alt="NotFitForPurpose DS18B20. Image copyright (c) 21 December 2024 nofitnessforpurpose All Rights Reserved">
   </div>
 </div>
 <BR>
@@ -77,7 +77,7 @@ A standard 1-Wire device (such as the DS18B20) is connected:
 1-wire signals are typically 0 to 5 volt (3 Volt devices are becoming available) having signals as shown below:
 <div align="center">
   <div style="display: flex; align-items: flex-start;">
-  <img src="https://github.com/nofitnessforpurpose/OPL-1-Wire/blob/main/images/1-Wire%20Waveform%20Graphic.jpg?raw=true" width="400px" alt="NotFitForPurpose DS18B20 signals. Image copyright (c) 21 December 2024 nofitnessforpurpose All Rights Reserved">
+  <img src="https://github.com/nofitnessforpurpose/OPL-1-Wire/blob/main/images/1-Wire%20Waveform%20Graphic.jpg" width="400px" alt="NotFitForPurpose DS18B20 signals. Image copyright (c) 21 December 2024 nofitnessforpurpose All Rights Reserved">
   </div>
 </div>
 <BR>
